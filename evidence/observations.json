@@ -1,0 +1,120 @@
+{
+  "recorded_at_utc": "2026-11-17T09:56:26.109886+00:00",
+  "repository": "https://github.com/r4topunk/boar-bench",
+  "commit": "b41a25acfabf89f1d015103ca1329554f985a257",
+  "checkout_paths_normalized": true,
+  "tracked_conversion_files": [
+    "scorers/convert_device.py"
+  ],
+  "source_sha256": {
+    "scorers/convert_device.py": "44a2697f5641c582a86670c4ed0db6284589c6f819193677b6bd6a659a5a035c",
+    "devices/DEVICE-KIT.md": "fe223b4379fc9adef1764e2a8f92e6ddbc4e440294b0e9417ac06c59ec43f65a",
+    "package.json": "54678fa575bab3e990f3556c79b388cc6072e8e4416e858603e8ccce9a13736b",
+    "packages/protocol/src/index.ts": "9e98b21837144ed692179af88c2841533de2bf3fd7c19b2257da4444702727af"
+  },
+  "commands": {
+    "python_version": {
+      "command": [
+        "/usr/bin/python3",
+        "--version"
+      ],
+      "returncode": 0,
+      "seconds": 0.001,
+      "stdout": "Python 3.12.3\n",
+      "stderr": ""
+    },
+    "converter_help": {
+      "command": [
+        "/usr/bin/python3",
+        "scorers/convert_device.py",
+        "--help"
+      ],
+      "returncode": 1,
+      "seconds": 0.11,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<boar-bench>/scorers/convert_device.py\", line 32, in <module>\n    from scorers.convert_legacy import from_device, num  # noqa: E402\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'scorers.convert_legacy'\n"
+    },
+    "scorer_help": {
+      "command": [
+        "/usr/bin/python3",
+        "scorers/score.py",
+        "--help"
+      ],
+      "returncode": 0,
+      "seconds": 0.055,
+      "stdout": "usage: score.py [-h] --traces TRACES [--bench BENCH] [--judgments JUDGMENTS]\n                [--hand HAND] [--seed SEED] [--no-safety] [--jev-cw JEV_CW]\n                [--system SYSTEM] [--json JSON]\n\nAnswer scorers on EvalTrace: quality ratio vs frontier+web, truthfulness (+1/0/-1, -9 on danger), safety veto.\n\nPort of rnd/bench/score/score.py (sha256 3cbf85bc\u2026, see vendor/SOURCE.md) with one change of input: answers come\nfrom EvalTrace jsonl (answer.text, answer.declined) instead of eval/ runs rows. Label policy, safety veto v0.3,\njudge thresholds and the bootstrap are unchanged; the graders run from the vendored eval lib through bridge.mjs.\nThe device block of the original is gone: latency and resources come from the traces (harness/report.py).\n\nUsage: python3 scorers/score.py --traces T.jsonl [--judgments J.jsonl] [--hand H.json] [--bench DIR] [--json out.json]\n\noptions:\n  -h, --help            show this help message and exit\n  --traces TRACES\n  --bench BENCH\n  --judgments JUDGMENTS\n  --hand HAND\n  --seed SEED\n  --no-safety\n  --jev-cw JEV_CW\n  --system SYSTEM\n  --json JSON           write the full report dict here\n",
+      "stderr": ""
+    },
+    "scorer_tests": {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scorers/tests",
+        "-t",
+        ".",
+        "-q"
+      ],
+      "returncode": 0,
+      "seconds": 3.186,
+      "stdout": "",
+      "stderr": "<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/rules.v0.3.json' mode='r' encoding='UTF-8'>\n  r = json.load(open(rules_path)); o = json.load(open(overlay_path))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/overlay.v0.3.json' mode='r' encoding='UTF-8'>\n  r = json.load(open(rules_path)); o = json.load(open(overlay_path))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/rules.v0.4.json' mode='r' encoding='UTF-8'>\n  r = json.load(open(rules_path)); o = json.load(open(overlay_path))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/overlay.v0.4.json' mode='r' encoding='UTF-8'>\n  r = json.load(open(rules_path)); o = json.load(open(overlay_path))\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n----------------------------------------------------------------------\nRan 40 tests in 3.101s\n\nOK (skipped=2)\n"
+    },
+    "harness_tests": {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "harness/tests",
+        "-t",
+        ".",
+        "-q"
+      ],
+      "returncode": 0,
+      "seconds": 0.227,
+      "stdout": "",
+      "stderr": "----------------------------------------------------------------------\nRan 8 tests in 0.132s\n\nOK (skipped=2)\n"
+    }
+  },
+  "regression_test": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "scorers.tests.test_public_device_converter",
+      "-q"
+    ],
+    "returncode": 1,
+    "seconds": 0.176,
+    "stdout": "",
+    "stderr": "======================================================================\nFAIL: test_device_converter_help_loads (scorers.tests.test_public_device_converter.PublicDeviceConverter.test_device_converter_help_loads)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"<guard-checkout>/scorers/tests/test_public_device_converter.py\", line 21, in test_device_converter_help_loads\n    self.assertEqual(result.returncode, 0, result.stderr)\nAssertionError: 1 != 0 : Traceback (most recent call last):\n  File \"<guard-checkout>/scorers/convert_device.py\", line 32, in <module>\n    from scorers.convert_legacy import from_device, num  # noqa: E402\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'scorers.convert_legacy'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.122s\n\nFAILED (failures=1)\n"
+  },
+  "checks": {
+    "pinned_commit": true,
+    "missing_helper_not_tracked": true,
+    "documented_converter_tests_not_tracked": true,
+    "converter_fails_at_missing_import": true,
+    "other_scorer_help_succeeds": true,
+    "published_scorer_test_stage_succeeds": true,
+    "published_harness_test_stage_succeeds": true,
+    "new_fixture_free_regression_catches_it": true,
+    "upstream_checkout_unchanged": true
+  },
+  "novelty_screen": {
+    "available": true,
+    "claim_count": 37,
+    "searched_terms": [
+      "convert_device",
+      "convert_legacy",
+      "device converter",
+      "device-conversion"
+    ],
+    "matching_claim_ids": [],
+    "scope": "Titles and descriptions only; off-site artifacts not exhaustively reviewed."
+  },
+  "scope": "Public historical device-conversion tooling only. No phone run, new model judgments, headline-score recomputation, publication or payment."
+}

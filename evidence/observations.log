@@ -1,0 +1,96 @@
+=== python_version ===
+$ /usr/bin/python3 --version
+exit: 0
+Python 3.12.3
+
+
+=== converter_help ===
+$ /usr/bin/python3 scorers/convert_device.py --help
+exit: 1
+
+Traceback (most recent call last):
+  File "<boar-bench>/scorers/convert_device.py", line 32, in <module>
+    from scorers.convert_legacy import from_device, num  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'scorers.convert_legacy'
+
+=== scorer_help ===
+$ /usr/bin/python3 scorers/score.py --help
+exit: 0
+usage: score.py [-h] --traces TRACES [--bench BENCH] [--judgments JUDGMENTS]
+                [--hand HAND] [--seed SEED] [--no-safety] [--jev-cw JEV_CW]
+                [--system SYSTEM] [--json JSON]
+
+Answer scorers on EvalTrace: quality ratio vs frontier+web, truthfulness (+1/0/-1, -9 on danger), safety veto.
+
+Port of rnd/bench/score/score.py (sha256 3cbf85bc…, see vendor/SOURCE.md) with one change of input: answers come
+from EvalTrace jsonl (answer.text, answer.declined) instead of eval/ runs rows. Label policy, safety veto v0.3,
+judge thresholds and the bootstrap are unchanged; the graders run from the vendored eval lib through bridge.mjs.
+The device block of the original is gone: latency and resources come from the traces (harness/report.py).
+
+Usage: python3 scorers/score.py --traces T.jsonl [--judgments J.jsonl] [--hand H.json] [--bench DIR] [--json out.json]
+
+options:
+  -h, --help            show this help message and exit
+  --traces TRACES
+  --bench BENCH
+  --judgments JUDGMENTS
+  --hand HAND
+  --seed SEED
+  --no-safety
+  --jev-cw JEV_CW
+  --system SYSTEM
+  --json JSON           write the full report dict here
+
+
+=== scorer_tests ===
+$ /usr/bin/python3 -m unittest discover -s scorers/tests -t . -q
+exit: 0
+
+<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/rules.v0.3.json' mode='r' encoding='UTF-8'>
+  r = json.load(open(rules_path)); o = json.load(open(overlay_path))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/overlay.v0.3.json' mode='r' encoding='UTF-8'>
+  r = json.load(open(rules_path)); o = json.load(open(overlay_path))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/rules.v0.4.json' mode='r' encoding='UTF-8'>
+  r = json.load(open(rules_path)); o = json.load(open(overlay_path))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<boar-bench>/scorers/vendor/safety/safety_check.py:12: ResourceWarning: unclosed file <_io.TextIOWrapper name='<boar-bench>/scorers/vendor/safety/overlay.v0.4.json' mode='r' encoding='UTF-8'>
+  r = json.load(open(rules_path)); o = json.load(open(overlay_path))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+----------------------------------------------------------------------
+Ran 40 tests in 3.101s
+
+OK (skipped=2)
+
+=== harness_tests ===
+$ /usr/bin/python3 -m unittest discover -s harness/tests -t . -q
+exit: 0
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.132s
+
+OK (skipped=2)
+
+=== proposed_regression ===
+$ /usr/bin/python3 -m unittest scorers.tests.test_public_device_converter -q
+exit: 1
+
+======================================================================
+FAIL: test_device_converter_help_loads (scorers.tests.test_public_device_converter.PublicDeviceConverter.test_device_converter_help_loads)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<guard-checkout>/scorers/tests/test_public_device_converter.py", line 21, in test_device_converter_help_loads
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "<guard-checkout>/scorers/convert_device.py", line 32, in <module>
+    from scorers.convert_legacy import from_device, num  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'scorers.convert_legacy'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.122s
+
+FAILED (failures=1)

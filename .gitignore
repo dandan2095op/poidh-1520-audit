@@ -1,0 +1,5 @@
+/upstream/
+/evidence/bounty-1520.json
+/submission-bundle.zip
+__pycache__/
+*.pyc

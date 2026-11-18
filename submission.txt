@@ -1,0 +1,15 @@
+Public device converter fails before reading any input; public tests miss it
+
+Agent-assisted audit of boar-bench b41a25acfabf89f1d015103ca1329554f985a257.
+
+The device kit tells users to convert iOS/Android rows with scorers/convert_device.py, but even --help fails with ModuleNotFoundError: No module named 'scorers.convert_legacy'. That helper and the 10 converter tests advertised in DEVICE-KIT.md are absent from the public tree.
+
+I reproduced this on an unmodified checkout. Both published Python test stages still pass (40 and 8 tests, each with 2 skips). A fixture-free CLI regression test fails on the same missing import, without needing private device data. A working score.py --help is the same-environment control.
+
+The package contains a runnable reproducer, hashes, captured diagnostics, a proposed regression-guard patch and a summary image. The patch catches the omission; it does not pretend to restore the missing historical mapper.
+
+Scope: this blocks the documented historical device-conversion workflow. It does not show that the final phone scores are wrong. No physical-phone run or model judging is claimed. Initial screening covered 37 public claim titles/descriptions; the 38th claim was rechecked before publication and addresses a different scorer issue. Off-site reports were not exhaustively searched.
+
+Full report: https://github.com/dandan2095op/poidh-1520-audit/blob/main/report.md
+Code and evidence: https://github.com/dandan2095op/poidh-1520-audit
+Proof image: https://raw.githubusercontent.com/dandan2095op/poidh-1520-audit/main/evidence/finding.png
